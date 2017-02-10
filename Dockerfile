@@ -36,10 +36,11 @@ RUN $CONDA upgrade -y --all
 
 # install and configure theano
 WORKDIR $HOME_DIR
-ADD assets/* $HOME_DIR/
+ADD assets/.theanorc $HOME_DIR/.theanorc
+RUN mkdir -p $HOME_DIR/.keras
+ADD assets/.keras/keras.json $HOME_DIR/.keras/keras.json
 RUN $HOME_DIR/anaconda2/bin/pip install theano
 RUN $HOME_DIR/anaconda2/bin/pip install keras
-RUN $HOME_DIR/anaconda2/bin/pip install tensorflow
 
 WORKDIR $TMP_DIR
 
