@@ -39,6 +39,7 @@ WORKDIR $HOME_DIR
 ADD assets/* $HOME_DIR/
 RUN $HOME_DIR/anaconda2/bin/pip install theano
 RUN $HOME_DIR/anaconda2/bin/pip install keras
+RUN $HOME_DIR/anaconda2/bin/pip install tensorflow
 
 WORKDIR $TMP_DIR
 
