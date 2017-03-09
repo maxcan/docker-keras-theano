@@ -24,8 +24,9 @@ RUN apt-get --assume-yes install curl wget
 # RUN modprobe nvidia
 #$ RUN nvidia-smi
 
-RUN wget --quiet "https://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh" -O "Anaconda2-4.2.0-Linux-x86_64.sh"
-RUN bash "Anaconda2-4.2.0-Linux-x86_64.sh" -b
+ENV CONDA_VERS=4.3.0
+RUN wget --quiet "https://repo.continuum.io/archive/Anaconda2-${CONDA_VERS}-Linux-x86_64.sh" -O "Anaconda2-${CONDA_VERS}-Linux-x86_64.sh"
+RUN bash "Anaconda2-${CONDA_VERS}-Linux-x86_64.sh" -b
 
 RUN echo "export PATH=\$PATH:$HOME_DIR/anaconda2/bin" >> $HOME_DIR/.bashrc
 
@@ -60,6 +61,10 @@ ENV NB_CONF=$HOME_DIR/.jupyter/jupyter_notebook_config.py
 RUN $HOME_DIR/anaconda2/bin/jupyter notebook --generate-config
 ARG JUPYTER_PASS
 RUN $HOME_DIR/anaconda2/bin/python -c "from notebook.auth import passwd; print(\"c.NotebookApp.password = u'\" + passwd(\"$JUPYTER_PASS\") + \"'\")" >> $NB_CONF
+
+RUN $HOME_DIR/anaconda2/bin/pip install jupyter_contrib_nbextensions jupyter_nbextensions_configurator
+# RUN $HOME_DIR/anaconda2/bin/jupyter nbextension enable codefolding/main
+RUN $HOME_DIR/anaconda2/bin/jupyter nbextensions_configurator enable --user
 
 # echo "c.NotebookApp.password = u'"$jupass"'" >> $HOME/.jupyter/jupyter_notebook_config.py
 RUN echo "c.NotebookApp.ip = '*'" >> $NB_CONF
