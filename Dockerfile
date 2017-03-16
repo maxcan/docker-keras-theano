@@ -62,11 +62,10 @@ RUN $HOME_DIR/anaconda2/bin/jupyter notebook --generate-config
 ARG JUPYTER_PASS
 RUN $HOME_DIR/anaconda2/bin/python -c "from notebook.auth import passwd; print(\"c.NotebookApp.password = u'\" + passwd(\"$JUPYTER_PASS\") + \"'\")" >> $NB_CONF
 
-RUN $HOME_DIR/anaconda2/bin/pip install jupyter_contrib_nbextensions jupyter_nbextensions_configurator
-# RUN $HOME_DIR/anaconda2/bin/jupyter nbextension enable codefolding/main
+RUN $HOME_DIR/anaconda2/bin/pip install jupyter_contrib_nbextensions
+RUN $HOME_DIR/anaconda2/bin/jupyter contrib nbextensions install --user
 RUN $HOME_DIR/anaconda2/bin/jupyter nbextensions_configurator enable --user
 
-# echo "c.NotebookApp.password = u'"$jupass"'" >> $HOME/.jupyter/jupyter_notebook_config.py
 RUN echo "c.NotebookApp.ip = '*'" >> $NB_CONF
 # c.NotebookApp.open_browser = False" >> $HOME/.jupyter/jupyter_notebook_config.py
 # 
@@ -75,6 +74,11 @@ RUN echo "c.NotebookApp.ip = '*'" >> $NB_CONF
 # git clone https://github.com/fastai/courses.git
 # echo "\"jupyter notebook\" will start Jupyter on port 8888"
 # echo "If you get an error instead, try restarting your session so your $PATH is updated"
+# RUN $HOME_DIR/anaconda2/bin/jupyter nbextension enable
+RUN $HOME_DIR/anaconda2/bin/jupyter nbextension enable codefolding/main
+RUN $HOME_DIR/anaconda2/bin/jupyter nbextension enable collapsible_headings/main
+RUN $HOME_DIR/anaconda2/bin/jupyter nbextension enable toc2/main
+RUN $HOME_DIR/anaconda2/bin/jupyter nbextension enable comment-uncomment/main
 WORKDIR $HOME_DIR
 CMD $HOME_DIR/anaconda2/bin/jupyter notebook --notebook-dir=/opt/notebooks --port=8888 --no-browser
  
